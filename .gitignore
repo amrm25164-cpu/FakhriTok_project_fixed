@@ -1,0 +1,14 @@
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.idea/
+.vscode/
+.env
+backend/.venv/
+backend/__pycache__/
+backend/*.db
+backend/uploads/*
+!backend/uploads/.gitkeep
+android/local.properties
