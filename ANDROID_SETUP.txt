@@ -1,0 +1,13 @@
+FakhriTok Android setup
+=======================
+This source is intended to be opened as a Flutter project in Klencod IDE or another Flutter-compatible environment.
+
+If the IDE does not create Android scaffolding automatically, run:
+  flutter create --platforms=android .
+
+Then:
+  flutter pub get
+  flutter analyze
+  flutter build apk --release
+
+The app currently runs in local demo mode. Real multi-user social networking requires backend implementation and configuration as documented in README.md.
