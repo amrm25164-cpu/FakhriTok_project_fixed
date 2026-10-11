@@ -1,0 +1,56 @@
+name: Build FakhriTok APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      # This repository contains the Flutter source but may not contain the
+      # generated Android platform folder. Re-create Android scaffolding before
+      # pub get/build so Flutter can find android/app/build.gradle.
+      - name: Generate Android platform files if missing
+        run: |
+          if [ ! -f android/app/build.gradle ]; then
+            echo "Android Gradle files are missing; generating Android platform..."
+            rm -rf android
+            flutter create --platforms=android --project-name=fakhritok --org com.fakhritok .
+          else
+            echo "Android Gradle files already exist."
+          fi
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: FakhriTok-APK
+          path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
+          retention-days: 7
